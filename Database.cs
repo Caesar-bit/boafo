@@ -1,12 +1,12 @@
 using System;
 using System.Configuration;
 using System.Data.SqlClient;
-using System.IO;
 
 namespace EmployeeManagementSystem
 {
     public static class Database
     {
+        private const string DbName = "EMS";
         private static readonly string connectionString =
             ConfigurationManager.ConnectionStrings["EMSConnection"].ConnectionString;
 
@@ -14,15 +14,7 @@ namespace EmployeeManagementSystem
         {
             try
             {
-                string dataDir = AppDomain.CurrentDomain.GetData("DataDirectory")?.ToString()
-                    ?? AppDomain.CurrentDomain.BaseDirectory;
-                Directory.CreateDirectory(dataDir);
-                string dbPath = Path.Combine(dataDir, "employee.mdf");
-                if (!File.Exists(dbPath))
-                {
-                    CreateDatabase(dbPath);
-                }
-
+                EnsureDatabase();
                 EnsureTables();
             }
             catch (Exception ex)
@@ -32,17 +24,13 @@ namespace EmployeeManagementSystem
             }
         }
 
-        private static void CreateDatabase(string mdfPath)
+        private static void EnsureDatabase()
         {
-            string logPath = Path.ChangeExtension(mdfPath, ".ldf");
-            string dbName = Path.GetFileNameWithoutExtension(mdfPath);
-            string createDb = $"CREATE DATABASE [{dbName}] ON (NAME='{dbName}', FILENAME='{mdfPath}') " +
-                $"LOG ON (NAME='{dbName}_log', FILENAME='{logPath}')";
-
             using (var connection = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;Integrated Security=True;"))
             {
                 connection.Open();
-                using (var command = new SqlCommand(createDb, connection))
+                string sql = $"IF DB_ID('{DbName}') IS NULL CREATE DATABASE [{DbName}]";
+                using (var command = new SqlCommand(sql, connection))
                 {
                     command.ExecuteNonQuery();
                 }
