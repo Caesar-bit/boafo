@@ -18,7 +18,7 @@ namespace EmployeeManagementSystem
         public string Position { set; get; } // 4
         public int Salary { set; get; } // 5
 
-        SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\HENRY\Documents\employee.mdf;Integrated Security=True;Connect Timeout=30");
+        SqlConnection connect = Database.GetConnection();
 
         public List<SalaryData> salaryEmployeeListData()
         {

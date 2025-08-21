@@ -13,7 +13,7 @@ namespace EmployeeManagementSystem
 {
     public partial class Dashboard : UserControl
     {
-        SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\HENRY\Documents\employee.mdf;Integrated Security=True;Connect Timeout=30");
+        SqlConnection connect = Database.GetConnection();
         public Dashboard()
         {
             InitializeComponent();
