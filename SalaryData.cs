@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
-using System.Data.SqlClient;
+using Mono.Data.Sqlite;
 
 namespace EmployeeManagementSystem
 {
@@ -18,7 +18,7 @@ namespace EmployeeManagementSystem
         public string Position { set; get; } // 4
         public int Salary { set; get; } // 5
 
-        SqlConnection connect = Database.GetConnection();
+        SqliteConnection connect = Database.GetConnection();
 
         public List<SalaryData> salaryEmployeeListData()
         {
@@ -33,9 +33,9 @@ namespace EmployeeManagementSystem
                     string selectData = "SELECT * FROM employees WHERE status = 'Active' " +
                         "AND delete_date IS NULL";
 
-                    using (SqlCommand cmd = new SqlCommand(selectData, connect))
+                    using (SqliteCommand cmd = new SqliteCommand(selectData, connect))
                     {
-                        SqlDataReader reader = cmd.ExecuteReader();
+                        SqliteDataReader reader = cmd.ExecuteReader();
 
                         while (reader.Read())
                         {

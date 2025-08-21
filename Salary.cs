@@ -8,13 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data;
-using System.Data.SqlClient;
+using Mono.Data.Sqlite;
 
 namespace EmployeeManagementSystem
 {
     public partial class Salary : UserControl
     {
-        SqlConnection connect = Database.GetConnection();
+        SqliteConnection connect = Database.GetConnection();
 
         public Salary()
         {
@@ -79,7 +79,7 @@ namespace EmployeeManagementSystem
                             string updateData = "UPDATE employees SET salary = @salary" +
                                 ", update_date = @updateData WHERE employee_id = @employeeID";
 
-                            using(SqlCommand cmd = new SqlCommand(updateData, connect))
+                            using(SqliteCommand cmd = new SqliteCommand(updateData, connect))
                             {
                                 cmd.Parameters.AddWithValue("@salary", salary_salary.Text.Trim());
                                 cmd.Parameters.AddWithValue("@updateData", today);
