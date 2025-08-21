@@ -7,13 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data.SqlClient;
+using Mono.Data.Sqlite;
 
 namespace EmployeeManagementSystem
 {
     public partial class Dashboard : UserControl
     {
-        SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\HENRY\Documents\employee.mdf;Integrated Security=True;Connect Timeout=30");
+        SqliteConnection connect = Database.GetConnection();
         public Dashboard()
         {
             InitializeComponent();
@@ -46,9 +46,9 @@ namespace EmployeeManagementSystem
 
                     string selectData = "SELECT COUNT(id) FROM employees WHERE delete_date IS NULL";
 
-                    using(SqlCommand cmd = new SqlCommand(selectData, connect))
+                    using(SqliteCommand cmd = new SqliteCommand(selectData, connect))
                     {
-                        SqlDataReader reader = cmd.ExecuteReader();
+                        SqliteDataReader reader = cmd.ExecuteReader();
 
                         if (reader.Read())
                         {
@@ -81,10 +81,10 @@ namespace EmployeeManagementSystem
                     string selectData = "SELECT COUNT(id) FROM employees WHERE status = @status " +
                         "AND delete_date IS NULL";
 
-                    using (SqlCommand cmd = new SqlCommand(selectData, connect))
+                    using (SqliteCommand cmd = new SqliteCommand(selectData, connect))
                     {
                         cmd.Parameters.AddWithValue("@status", "Active");
-                        SqlDataReader reader = cmd.ExecuteReader();
+                        SqliteDataReader reader = cmd.ExecuteReader();
 
                         if (reader.Read())
                         {
@@ -118,10 +118,10 @@ namespace EmployeeManagementSystem
                     string selectData = "SELECT COUNT(id) FROM employees WHERE status = @status " +
                         "AND delete_date IS NULL";
 
-                    using (SqlCommand cmd = new SqlCommand(selectData, connect))
+                    using (SqliteCommand cmd = new SqliteCommand(selectData, connect))
                     {
                         cmd.Parameters.AddWithValue("@status", "Ianctive");
-                        SqlDataReader reader = cmd.ExecuteReader();
+                        SqliteDataReader reader = cmd.ExecuteReader();
 
                         if (reader.Read())
                         {

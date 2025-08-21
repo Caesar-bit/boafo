@@ -8,14 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data;
-using System.Data.SqlClient;
+using Mono.Data.Sqlite;
 
 namespace EmployeeManagementSystem
 {
     public partial class RegisterForm : Form
     {
-        SqlConnection connect 
-            = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\HENRY\Documents\employee.mdf;Integrated Security=True;Connect Timeout=30");
+        SqliteConnection connect = Database.GetConnection();
         public RegisterForm()
         {
             InitializeComponent();
@@ -56,7 +55,7 @@ namespace EmployeeManagementSystem
                         // TO CHECK IF THE USER IS EXISTING ALREADY
                         string selectUsername = "SELECT COUNT(id) FROM users WHERE username = @user";
 
-                        using(SqlCommand checkUser = new SqlCommand(selectUsername, connect))
+                        using(SqliteCommand checkUser = new SqliteCommand(selectUsername, connect))
                         {
                             checkUser.Parameters.AddWithValue("@user", signup_username.Text.Trim());
                             int count = (int)checkUser.ExecuteScalar();
@@ -74,7 +73,7 @@ namespace EmployeeManagementSystem
                                     "(username, password, date_registered) " +
                                     "VALUES(@username, @password, @dateReg)";
 
-                                using (SqlCommand cmd = new SqlCommand(insertData, connect))
+                                using (SqliteCommand cmd = new SqliteCommand(insertData, connect))
                                 {
                                     cmd.Parameters.AddWithValue("@username", signup_username.Text.Trim());
                                     cmd.Parameters.AddWithValue("@password", signup_password.Text.Trim());

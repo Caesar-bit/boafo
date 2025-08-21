@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
-using System.Data.SqlClient;
+using Mono.Data.Sqlite;
 
 namespace EmployeeManagementSystem
 {
@@ -22,7 +22,7 @@ namespace EmployeeManagementSystem
         public string Status { set; get; } // 8
 
 
-        SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\HENRY\Documents\employee.mdf;Integrated Security=True;Connect Timeout=30");
+        SqliteConnection connect = Database.GetConnection();
     
 
         public List<EmployeeData> employeeListData()
@@ -37,9 +37,9 @@ namespace EmployeeManagementSystem
 
                     string selectData = "SELECT * FROM employees WHERE delete_date IS NULL";
 
-                    using(SqlCommand cmd = new SqlCommand(selectData, connect))
+                    using(SqliteCommand cmd = new SqliteCommand(selectData, connect))
                     {
-                        SqlDataReader reader = cmd.ExecuteReader();
+                        SqliteDataReader reader = cmd.ExecuteReader();
 
                         while (reader.Read())
                         {
@@ -84,9 +84,9 @@ namespace EmployeeManagementSystem
 
                     string selectData = "SELECT * FROM employees WHERE delete_date IS NULL";
 
-                    using (SqlCommand cmd = new SqlCommand(selectData, connect))
+                    using (SqliteCommand cmd = new SqliteCommand(selectData, connect))
                     {
-                        SqlDataReader reader = cmd.ExecuteReader();
+                        SqliteDataReader reader = cmd.ExecuteReader();
 
                         while (reader.Read())
                         {

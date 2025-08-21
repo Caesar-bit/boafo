@@ -8,14 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data;
-using System.Data.SqlClient;
+using Mono.Data.Sqlite;
 
 namespace EmployeeManagementSystem
 {
     public partial class Form1 : Form
     {
-        SqlConnection connect
-            = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\HENRY\Documents\employee.mdf;Integrated Security=True;Connect Timeout=30");
+        SqliteConnection connect = Database.GetConnection();
         public Form1()
         {
             InitializeComponent();
@@ -67,12 +66,12 @@ namespace EmployeeManagementSystem
                         string selectData = "SELECT * FROM users WHERE username = @username " +
                             "AND password = @password";
 
-                        using(SqlCommand cmd = new SqlCommand(selectData, connect))
+                        using(SqliteCommand cmd = new SqliteCommand(selectData, connect))
                         {
                             cmd.Parameters.AddWithValue("@username", login_username.Text.Trim());
                             cmd.Parameters.AddWithValue("@password", login_password.Text.Trim());
 
-                            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                            SqliteDataAdapter adapter = new SqliteDataAdapter(cmd);
                             DataTable table = new DataTable();
                             adapter.Fill(table);
 

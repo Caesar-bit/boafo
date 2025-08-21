@@ -16,6 +16,7 @@ namespace EmployeeManagementSystem
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            Database.Initialize();
             Application.Run(new Form1());
         }
     }

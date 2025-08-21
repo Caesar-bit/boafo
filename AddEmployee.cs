@@ -7,14 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data.SqlClient;
+using Mono.Data.Sqlite;
 using System.IO;
 
 namespace EmployeeManagementSystem
 {
     public partial class AddEmployee : UserControl
     {
-        SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\HENRY\Documents\employee.mdf;Integrated Security=True;Connect Timeout=30");
+        SqliteConnection connect = Database.GetConnection();
 
         public AddEmployee()
         {
@@ -64,7 +64,7 @@ namespace EmployeeManagementSystem
                         connect.Open();
                         string checkEmID = "SELECT COUNT(*) FROM employees WHERE employee_id = @emID AND delete_date IS NULL";
 
-                        using(SqlCommand checkEm = new SqlCommand(checkEmID, connect))
+                        using(SqliteCommand checkEm = new SqliteCommand(checkEmID, connect))
                         {
                             checkEm.Parameters.AddWithValue("@emID", addEmployee_id.Text.Trim());
                             int count = (int)checkEm.ExecuteScalar();
@@ -95,7 +95,7 @@ namespace EmployeeManagementSystem
 
                                 File.Copy(addEmployee_picture.ImageLocation, path, true);
 
-                                using(SqlCommand cmd = new SqlCommand(insertData, connect))
+                                using(SqliteCommand cmd = new SqliteCommand(insertData, connect))
                                 {
                                     cmd.Parameters.AddWithValue("@employeeID", addEmployee_id.Text.Trim());
                                     cmd.Parameters.AddWithValue("@fullName", addEmployee_fullName.Text.Trim());
@@ -220,7 +220,7 @@ namespace EmployeeManagementSystem
                             ", position = @position, update_date = @updateDate, status = @status " +
                             "WHERE employee_id = @employeeID";
 
-                        using (SqlCommand cmd = new SqlCommand(updateData, connect))
+                        using (SqliteCommand cmd = new SqliteCommand(updateData, connect))
                         {
                             cmd.Parameters.AddWithValue("@fullName", addEmployee_fullName.Text.Trim());
                             cmd.Parameters.AddWithValue("@gender", addEmployee_gender.Text.Trim());
@@ -293,7 +293,7 @@ namespace EmployeeManagementSystem
                         string updateData = "UPDATE employees SET delete_date = @deleteDate " +
                             "WHERE employee_id = @employeeID";
 
-                        using (SqlCommand cmd = new SqlCommand(updateData, connect))
+                        using (SqliteCommand cmd = new SqliteCommand(updateData, connect))
                         {
                             cmd.Parameters.AddWithValue("@deleteDate", today);
                             cmd.Parameters.AddWithValue("@employeeID", addEmployee_id.Text.Trim());
